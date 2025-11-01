@@ -1,0 +1,401 @@
+<app-navbar></app-navbar>
+
+<main>
+
+    <div class="p-4 sm:ml-64">
+
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+
+            <div class="text-2xl flex justify-center mt-5">
+                <h1 class="text-white ">CREATE NEW A SUPPLIERS</h1>
+            </div>
+
+            <form [formGroup]="formSuppliers">
+                <section class="mt-5">
+                    <h1 class="text-white text-xl">Information basic</h1>
+                    <div class="grid md:grid-cols-2 grid-cols-1 gap-x-8 mt-5">
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Business
+                                name<svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="text" id="nombreEmpresa" name="nombreEmpresa"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="Enter name or business name" required="">
+                        </div>
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Trade name
+                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="text" id="nombreComercial" name="nombreComercial"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="Enter name or business name" required="">
+                        </div>
+
+
+                    </div>
+
+                    <div class="grid md:grid-cols-2 grid-cols-1 gap-x-8">
+
+                        <fieldset class="text-gray-300">
+                            <legend class="text-lg font-semibold text-white mb-2">Tipo de Documento</legend>
+
+                            <div>
+                                <input type="radio" id="doc-ruc" name="tipoDocumento" value="ruc"
+                                    formControlName="tipoDocumento">
+                                <label for="doc-ruc" class="ml-2"> RUC</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="doc-cedula" name="tipoDocumento" value="cedula"
+                                    formControlName="tipoDocumento">
+                                <label for="doc-cedula" class="ml-2"> Cédula</label>
+                            </div>
+
+                            <div class="mt-5">
+                                <label for="numero-doc" class="block text-sm font-medium text-white">
+                                    Número de {{ f['tipoDocumento'].value | titlecase }}:
+                                </label>
+
+                                <input type="text" id="numero-doc" formControlName="numero"
+                                    [placeholder]="f['tipoDocumento'].value === 'cedula' ? '1712345678' : '1791234567001'"
+                                    class="mt-3 block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border rounded-full placeholder-gray-400 focus:outline-none"
+                                    [ngClass]="{'border-red-500 focus:ring-red-500': f['numero'].invalid && (f['numero'].dirty || f['numero'].touched),'border-gray-300 focus:ring-indigo-500': f['numero'].valid || !(f['numero'].dirty || f['numero'].touched)}" [attr.maxlength]="f['tipoDocumento'].value === 'cedula' ? 10 : 13">
+
+                                <!-- Mensajes de error mejorados -->
+                                <div *ngIf="f['numero'].invalid && (f['numero'].dirty || f['numero'].touched)"
+                                    class="mt-1 text-xs text-red-400 pl-4">
+                                    <div *ngIf="f['numero'].errors?.['required']">
+                                        El número es obligatorio.
+                                    </div>
+                                    <div *ngIf="f['numero'].errors?.['soloNumeros']">
+                                        {{ f['numero'].errors?.['soloNumeros'] }}
+                                    </div>
+                                    <div *ngIf="f['numero'].errors?.['longitudInvalida']">
+                                        {{ f['numero'].errors?.['longitudInvalida'] }}
+                                    </div>
+                                    <div *ngIf="f['numero'].errors?.['formatoInvalido']">
+                                        {{ f['numero'].errors?.['formatoInvalido'] }}
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                    </div>
+
+                </section>
+
+                <section class="mt-5">
+                    <h1 class="text-white text-xl">Direction</h1>
+                    <div class="mt-5 grid md:grid-cols-2 grid-cols-1 gap-x-8">
+
+                        <!-- Selector de provincia -->
+                        <div class="relative mb-6">
+                            <label class="flex items-center mb-2 text-gray-600 text-sm font-medium">
+                                Choose a province
+                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+
+                            <select id="provincia" name="provincia"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white border border-gray-600 rounded-full placeholder-gray-400 focus:outline-none"
+                                [(ngModel)]="provinciaSeleccionada" (change)="seleccionarProvincia()">
+
+                                <option value="" class="text-gray-400 bg-gray-700">Selecciona una provincia...</option>
+                                <option *ngFor="let prov of provincias" [value]="prov" class="text-white bg-gray-700">
+                                    {{ prov }}
+                                </option>
+                            </select>
+
+                            <!-- Mostrar provincia seleccionada -->
+                            <p *ngIf="provinciaSeleccionada" class="mt-2 text-gray-300">
+                                Provincia seleccionada: {{ provinciaSeleccionada }}
+                            </p>
+                        </div>
+
+                        <!-- Selector de cantón -->
+                        <div class="relative mb-6" *ngIf="cantones.length > 0">
+                            <label class="flex items-center mb-2 text-gray-600 text-sm font-medium">
+                                Choose a canton
+                            </label>
+
+                            <select id="canton" name="canton"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white border border-gray-600 rounded-full placeholder-gray-400 focus:outline-none"
+                                [(ngModel)]="cantonSeleccionado" (change)="onCantonChange()">
+
+                                <option value="" class="text-gray-400 bg-gray-700">Selecciona un cantón...</option>
+                                <option *ngFor="let cant of cantones" [value]="cant" class="text-white bg-gray-700">
+                                    {{ cant }}
+                                </option>
+                            </select>
+
+                            <!-- Mostrar cantón seleccionado -->
+                            <p *ngIf="cantonSeleccionado" class="mt-2 text-gray-300">
+                                Cantón seleccionado: {{ cantonSeleccionado }}
+                            </p>
+                        </div>
+
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"> Canton/City<svg
+                                    width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="text" id="ciudad" name="ciudad"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="name@pagedone.com" required="">
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 grid-cols-1 gap-x-8">
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Email<svg width="7"
+                                    height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="email" id="correo" name="correo"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="name@pagedone.com" required="">
+                        </div>
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"> Direcction<svg
+                                    width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="text" id="direccion" name="direccion"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="calle asturias y n17" required="">
+                        </div>
+
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"> Telf <svg
+                                    width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="number" id="telf" name="telf"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="0997864558" required="">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mt-5">
+                    <h1 class="text-white text-xl font-semibold mb-3">Bank information</h1>
+                    <div class="mt-5 grid md:grid-cols-2 grid-cols-1 gap-x-8">
+                        <div class="relative mb-6">
+
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Type of bank<svg
+                                    width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <select
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white border border-gray-600 rounded-full placeholder-gray-400 focus:outline-none"
+                                name="bank" id="bank">
+                                <option class="text-gray-400 bg-gray-700" value="pichincha">Pichincha</option>
+                                <option class="text-gray-400 bg-gray-700" value="guayaquil">Guayaquil</option>
+                                <option class="text-gray-400 bg-gray-700" value="produbanco">Produbanco</option>
+                            </select>
+                        </div>
+
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Type of count<svg
+                                    width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <select
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white border border-gray-600 rounded-full placeholder-gray-400 focus:outline-none"
+                                name="bank" id="bank">
+                                <option class="text-gray-400 bg-gray-700" value="corriente">Corriente</option>
+                                <option class="text-gray-400 bg-gray-700" value="ahorros">Ahorros</option>
+                            </select>
+                        </div>
+
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Number of count
+                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="text" id="numeroCuenta" name="numeroCuenta"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="25781624" required="">
+                        </div>
+
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Account holder name
+                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="text" id="default-search"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="25781624" required="">
+                        </div>
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Cedula/RUC of the
+                                owner <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="text" id="default-search"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="25781624" required="">
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mt-5">
+                    <h1 class="text-white text-xl font-semibold mb-3">Operational details</h1>
+                    <div class="mt-5 grid md:grid-cols-2 grid-cols-1 gap-x-8">
+                        <div class="relative mb-6">
+                            <label class="flex items-center mb-2 text-gray-600 text-sm font-medium">
+                                Choose a rubro
+                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <select
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white border border-gray-600 rounded-full placeholder-gray-400 focus:outline-none"
+                                id="rubro">
+                                <option class="text-gray-400 bg-gray-700" value="">Select a rubro</option>
+                                <option class="text-gray-400 bg-gray-700" value="suministros de Oficina y Papelería">
+                                    Suministros de Oficina y Papelería</option>
+                                <option class="text-gray-400 bg-gray-700" value="equipos de Cómputo y Tecnología">
+                                    Equipos de Cómputo y Tecnología</option>
+                                <option class="text-gray-400 bg-gray-700" value="mantenimiento y Ferretería">
+                                    Mantenimiento y Ferretería</option>
+                                <option class="text-gray-400 bg-gray-700" value="limpieza e Higiene">Limpieza e Higiene
+                                </option>
+                                <option class="text-gray-400 bg-gray-700" value="alimentos y Bebidas">Alimentos y
+                                    Bebidas</option>
+                                <option class="text-gray-400 bg-gray-700" value="materia Prima">Materia Prima</option>
+                                <option class="text-gray-400 bg-gray-700" value="textiles y Uniformes">Textiles y
+                                    Uniformes</option>
+                                <option class="text-gray-400 bg-gray-700" value="salud y Farmacéutica">Salud y
+                                    Farmacéutica</option>
+                                <option class="text-gray-400 bg-gray-700" value="Servicios">Servicios (Contabilidad,
+                                    Software, etc.)</option>
+                                <option class="text-gray-400 bg-gray-700" value="otros">Otros</option>
+                            </select>
+                        </div>
+                        <div class="relative mb-6">
+                            <fieldset class="text-gray-300">
+                                <legend class="text-lg font-semibold text-white mb-2">Estado</legend>
+
+                                <div>
+                                    <input type="radio" id="doc-cedula" name="tipoDocumento" value="cedula">
+                                    <label for="doc-cedula" class="ml-2">Activo</label>
+                                </div>
+                                <div>
+                                    <input type="radio" id="doc-cedula" name="tipoDocumento" value="cedula">
+                                    <label for="doc-cedula" class="ml-2">Inactivo</label>
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Observation
+                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="text" id="trade name"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="Entrega solo los martes o Pedir con 3 días de anticipación" required="">
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <section class="mt-5">
+                    <h1 class="text-white text-xl font-semibold mb-3">Logo empresarial o imagen</h1>
+                    <div
+                        class="relative flex flex-col items-center justify-center w-full bg-gray-800 border-2 border-gray-600 border-dashed rounded-lg p-10 cursor-pointer hover:bg-gray-700 transition-colors">
+                        <div class="flex flex-col items-center justify-center text-center">
+                            <svg class="w-10 h-10 mb-4 text-gray-500" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                            </svg>
+                            <p class="mb-2 text-sm text-gray-400">
+                                <span class="font-semibold text-indigo-500">Haz clic para subir</span> o arrastra y
+                                suelta
+                            </p>
+                            <p class="text-xs text-gray-500">
+                                PNG, JPG o JPEG (MAX. 800x400px)
+                            </p>
+                        </div>
+                        <input type="file" id="logo-upload"
+                            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            accept="image/png, image/jpeg">
+                    </div>
+                    <p id="file-name" class="mt-2 text-sm text-gray-400"></p>
+                </section>
+
+                <div class="flex justify-center mt-5">
+                    <button
+                        class="w-52 h-12 bg-indigo-600 hover:bg-indigo-800 transition-all duration-700 rounded-full shadow-xs text-white text-base font-semibold leading-6">Send
+                        Message</button>
+                </div>
+            </form>
+
+
+        </div>
+        <app-footer></app-footer>
+    </div>
+
+
+
+
+</main>
