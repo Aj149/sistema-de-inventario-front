@@ -1,15 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { enviroment } from '../../../environments/environment';
+import { Proveedor } from '../../models/Suppliers';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SuppliersService {
-  
-private apiUrl = 'http://localhost:8000/api'; // Tu API de Django
 
-  constructor(private http: HttpClient) { }
+  suppliersURL = enviroment.suppliersURL
+
+  constructor(private httpclient: HttpClient) { }
+
+
+
+  public crearProveedor(nuevoProveedor: Proveedor): Observable<any>{
+    return this.httpclient.post<any>(`${this.suppliersURL}`,nuevoProveedor);
+  }
 
   // Función para subir la imagen
   uploadImage(productId: number, file: File): Observable<any> {
@@ -26,7 +34,7 @@ private apiUrl = 'http://localhost:8000/api'; // Tu API de Django
     // 3. Envía un PATCH
     // Usamos PATCH porque solo queremos actualizar un campo (la imagen),
     // no todo el objeto.
-    return this.http.patch(`${this.apiUrl}/products/${productId}/`, formData);
+    return this.httpclient.patch(`${this.suppliersURL}/products/${productId}/`, formData);
   }
 
 }

@@ -1,10 +1,11 @@
 export interface Provincia {
-    id_provincia?: number;
+    id?: number;
     nombre: string;
     ciudad: Ciudad [];
 } 
 
 export interface Ciudad {
-    id_ciudad?: number;
+    id?: number;
     nombre: string;
+    provincia: number;
 }

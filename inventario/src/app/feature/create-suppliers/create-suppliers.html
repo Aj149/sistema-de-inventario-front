@@ -10,198 +10,256 @@
                 <h1 class="text-white ">CREATE NEW A SUPPLIERS</h1>
             </div>
 
-            <form [formGroup]="formSuppliers">
+            @if (formSuppliers) {
+
+            <form [formGroup]="formSuppliers" (ngSubmit)="enviar()">
                 <section class="mt-5">
                     <h1 class="text-white text-xl">Information basic</h1>
                     <div class="grid md:grid-cols-2 grid-cols-1 gap-x-8 mt-5">
                         <div class="relative mb-6">
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Business
-                                name<svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                            <label class="flex items-center mb-2 text-gray-600 text-sm font-medium"
+                                [class.text-red-500]="formSuppliers.get('nom_empresa')?.invalid && 
+                     (formSuppliers.get('nom_empresa')?.dirty || formSuppliers.get('nom_empresa')?.touched)"
+                                for="nom_empresa">Businessname
+                                <svg width="7" height="7" class="ml-1" [class.opacity-100]="formSuppliers.get('nom_empresa')?.invalid && 
+                     (formSuppliers.get('nom_empresa')?.dirty || formSuppliers.get('nom_empresa')?.touched)"
+                                    [class.opacity-40]="formSuppliers.get('nom_empresa')?.valid || 
+                    !(formSuppliers.get('nom_empresa')?.dirty || formSuppliers.get('nom_empresa')?.touched)"
+                                    viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
                                         fill="#EF4444" />
                                 </svg>
                             </label>
-                            <input type="text" id="nombreEmpresa" name="nombreEmpresa"
-                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
-                                placeholder="Enter name or business name" required="">
+                            <input type="text" id="nom_empresa" name="nom_empresa" formControlName="nom_empresa"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal text-white bg-transparent border rounded-full placeholder-gray-400 focus:outline-none"
+                                [ngClass]="{ 
+  'border-red-500': formSuppliers.get('nom_empresa')?.invalid && 
+                    (formSuppliers.get('nom_empresa')?.dirty || formSuppliers.get('nom_empresa')?.touched),
+  'border-gray-300': formSuppliers.get('nom_empresa')?.valid || 
+                     !(formSuppliers.get('nom_empresa')?.dirty || formSuppliers.get('nom_empresa')?.touched)
+}" placeholder="Enter business name">
+                            @if (formSuppliers.get('nom_empresa')?.invalid && (formSuppliers.get('nom_empresa')?.dirty
+                            || formSuppliers.get('nom_empresa')?.touched)) {
+                            <div class="mt-1 text-xs text-red-400">
+                                @if (formSuppliers.get('nom_empresa')?.errors?.['required']) {
+                                <div>El nombre de la empresa es obligatorio.</div>
+                                }
+                                @if (formSuppliers.get('nom_empresa')?.errors?.['minlength']) {
+                                <div>Debe tener al menos 3 caracteres.</div>
+                                }
+                            </div>
+                            }
                         </div>
                         <div class="relative mb-6">
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Trade name
-                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"
+                                [class.text-red-500]="formSuppliers.get('nom_comercial')?.invalid && (formSuppliers.get('nom_comercial')?.dirty || formSuppliers.get('nom_comercial')?.touched)"
+                                for="nom_comercial">Trade name
+                                <svg width="7" height="7" class="ml-1"
+                                    [class.opacity-100]="formSuppliers.get('nom_comercial')?.invalid && (formSuppliers.get('nom_comercial')?.dirty || formSuppliers.get('nom_comercial')?.touched)"
+                                    [class.opacity-40]="formSuppliers.get('nom_comercial')?.valid || !(formSuppliers.get('nom_comercial')?.dirty || formSuppliers.get('nom_comercial')?.touched)"
+                                    viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
                                         fill="#EF4444" />
                                 </svg>
                             </label>
-                            <input type="text" id="nombreComercial" name="nombreComercial"
+                            <input type="text" id="nom_comercial" name="nom_comercial" formControlName="nom_comercial"
                                 class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
-                                placeholder="Enter name or business name" required="">
+                                [ngClass]="{'border-red-500': formSuppliers.get('nom_comercial')?.invalid && (formSuppliers.get('nom_comercial')?.dirty || formSuppliers.get('nom_comercial')?.touched),'border-gray-300': formSuppliers.get('nom_comercial')?.valid || !(formSuppliers.get('nom_comercial')?.dirty || formSuppliers.get('nom_comercial')?.touched)}"
+                                placeholder="Enter trade name">
+                            @if (formSuppliers.get('nom_comercial')?.invalid &&
+                            (formSuppliers.get('nom_comercial')?.dirty || formSuppliers.get('nom_comercial')?.touched))
+                            {
+                            <div class="mt-1 text-xs text-red-400">
+                                @if (formSuppliers.get('nom_comercial')?.errors?.['required']) {
+                                <div>El nombre comercial es obligatorio.</div>
+                                @if (formSuppliers.get('nom_comercial')?.errors?.['minlength']) {
+                                <div>Debe tener al menos 3 caracteres.</div>
+                                }
+                                }
+                            </div>
+                            }
                         </div>
-
-
                     </div>
-
                     <div class="grid md:grid-cols-2 grid-cols-1 gap-x-8">
-
                         <fieldset class="text-gray-300">
                             <legend class="text-lg font-semibold text-white mb-2">Tipo de Documento</legend>
-
                             <div>
-                                <input type="radio" id="doc-ruc" name="tipoDocumento" value="ruc"
-                                    formControlName="tipoDocumento">
+                                <input type="radio" id="tipo_documento" name="tipo_documento" value="ruc"
+                                    formControlName="tipo_documento">
                                 <label for="doc-ruc" class="ml-2"> RUC</label>
                             </div>
-
                             <div>
-                                <input type="radio" id="doc-cedula" name="tipoDocumento" value="cedula"
-                                    formControlName="tipoDocumento">
+                                <input type="radio" id="tipo_documento" name="tipo_documento" value="cedula"
+                                    formControlName="tipo_documento">
                                 <label for="doc-cedula" class="ml-2"> Cédula</label>
                             </div>
-
                             <div class="mt-5">
-                                <label for="numero-doc" class="block text-sm font-medium text-white">
-                                    Número de {{ f['tipoDocumento'].value | titlecase }}:
+                                <label class="block text-sm font-medium text-white">
+                                    Número de {{ formSuppliers.get('tipoDocumento')?.value | titlecase }}:
                                 </label>
-
-                                <input type="text" id="numero-doc" formControlName="numero"
-                                    [placeholder]="f['tipoDocumento'].value === 'cedula' ? '1712345678' : '1791234567001'"
+                                <input type="text" id="num_documento" formControlName="num_documento"
+                                    name="num_documento"
+                                    [placeholder]="formSuppliers.get('tipoDocumento')?.value === 'cedula' ? '1712345678' : '1791234567001'"
                                     class="mt-3 block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border rounded-full placeholder-gray-400 focus:outline-none"
-                                    [ngClass]="{'border-red-500 focus:ring-red-500': f['numero'].invalid && (f['numero'].dirty || f['numero'].touched),'border-gray-300 focus:ring-indigo-500': f['numero'].valid || !(f['numero'].dirty || f['numero'].touched)}" [attr.maxlength]="f['tipoDocumento'].value === 'cedula' ? 10 : 13">
-
-                                <!-- Mensajes de error mejorados -->
-                                <div *ngIf="f['numero'].invalid && (f['numero'].dirty || f['numero'].touched)"
-                                    class="mt-1 text-xs text-red-400 pl-4">
-                                    <div *ngIf="f['numero'].errors?.['required']">
+                                    [ngClass]="{'border-red-500 focus:ring-red-500': formSuppliers.get('num_documento')?.invalid && (formSuppliers.get('num_documento')?.dirty || formSuppliers.get('num_documento')?.touched),'border-gray-300 focus:ring-indigo-500': formSuppliers.get('num_documento')?.valid || !(formSuppliers.get('num_documento')?.dirty || formSuppliers.get('num_documento')?.touched)}"
+                                    [attr.maxlength]="formSuppliers.get('tipoDocumento')?.value === 'cedula' ? 10 : 13">
+                                @if (formSuppliers.get('num_documento')?.invalid &&
+                                (formSuppliers.get('num_documento')?.dirty ||
+                                formSuppliers.get('num_documento')?.touched)) {
+                                <div class="mt-1 text-xs text-red-400 pl-4">
+                                    @if (formSuppliers.get('num_documento')?.errors?.['required']) {
+                                    <div>
                                         El número es obligatorio.
                                     </div>
-                                    <div *ngIf="f['numero'].errors?.['soloNumeros']">
-                                        {{ f['numero'].errors?.['soloNumeros'] }}
+                                    }
+                                    @if (formSuppliers.get('num_documento')?.errors?.['soloNumeros']) {
+                                    <div>
+                                        <div>{{ formSuppliers.get('num_documento')?.errors?.['soloNumeros'] }}</div>
                                     </div>
-                                    <div *ngIf="f['numero'].errors?.['longitudInvalida']">
-                                        {{ f['numero'].errors?.['longitudInvalida'] }}
+                                    }
+                                    @if (formSuppliers.get('num_documento')?.errors?.['longitudInvalida']) {
+                                    <div>
+                                        <div>{{ formSuppliers.get('num_documento')?.errors?.['longitudInvalida'] }}
+                                        </div>
                                     </div>
-                                    <div *ngIf="f['numero'].errors?.['formatoInvalido']">
-                                        {{ f['numero'].errors?.['formatoInvalido'] }}
+                                    }
+                                    @if (formSuppliers.get('num_documento')?.errors?.['formatoInvalido']) {
+                                    <div>
+                                        <div>{{ formSuppliers.get('num_documento')?.errors?.['formatoInvalido'] }}</div>
                                     </div>
+                                    }
                                 </div>
+                                }
                             </div>
                         </fieldset>
-
                     </div>
-
                 </section>
 
                 <section class="mt-5">
                     <h1 class="text-white text-xl">Direction</h1>
                     <div class="mt-5 grid md:grid-cols-2 grid-cols-1 gap-x-8">
-
                         <!-- Selector de provincia -->
                         <div class="relative mb-6">
-                            <label class="flex items-center mb-2 text-gray-600 text-sm font-medium">
+                            <label class="flex items-center mb-2 text-gray-600 text-sm font-medium" for="provincia">
                                 Choose a province
-                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                                <svg width="7" height="7" class="ml-1"
+                                    [ngClass]="{'opacity-100': formSuppliers.get('provincia')?.invalid && formSuppliers.get('provincia')?.touched,'opacity-50': formSuppliers.get('provincia')?.valid || !formSuppliers.get('provincia')?.touched }"
+                                    viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
                                         fill="#EF4444" />
                                 </svg>
                             </label>
-
-                            <select id="provincia" name="provincia"
+                            <select id="provincia" name="provincia" formControlName="provincia"
+                                [ngClass]="{'border-red-500': formSuppliers.get('provincia')?.invalid && formSuppliers.get('provincia')?.touched }"
                                 class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white border border-gray-600 rounded-full placeholder-gray-400 focus:outline-none"
-                                [(ngModel)]="provinciaSeleccionada" (change)="seleccionarProvincia()">
-
-                                <option value="" class="text-gray-400 bg-gray-700">Selecciona una provincia...</option>
-                                <option *ngFor="let prov of provincias" [value]="prov" class="text-white bg-gray-700">
-                                    {{ prov }}
+                                (change)="onProvinciaChange($event)">
+                                <option class="text-gray-400 bg-gray-700">Selecciona una provincia...</option>
+                                @for (provincia of provincias; track provincia.id) {
+                                <option [value]="provincia.id" class="text-white bg-gray-700">
+                                    {{ provincia.nombre }}
                                 </option>
+                                }
                             </select>
-
-                            <!-- Mostrar provincia seleccionada -->
-                            <p *ngIf="provinciaSeleccionada" class="mt-2 text-gray-300">
-                                Provincia seleccionada: {{ provinciaSeleccionada }}
-                            </p>
+                            @if (formSuppliers.get('provincia')?.invalid && formSuppliers.get('provincia')?.touched) {
+                            <p class="text-xs text-red-400 mt-1 pl-2">La provincia es obligatoria.</p>
+                            }
                         </div>
-
-                        <!-- Selector de cantón -->
-                        <div class="relative mb-6" *ngIf="cantones.length > 0">
-                            <label class="flex items-center mb-2 text-gray-600 text-sm font-medium">
+                        <!-- Selector de ciudad/cantón -->
+                        <div class="relative mb-6">
+                            <label class="flex items-center mb-2 text-gray-600 text-sm font-medium" for="ciudad">
                                 Choose a canton
                             </label>
-
-                            <select id="canton" name="canton"
+                            <select
                                 class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white border border-gray-600 rounded-full placeholder-gray-400 focus:outline-none"
-                                [(ngModel)]="cantonSeleccionado" (change)="onCantonChange()">
-
-                                <option value="" class="text-gray-400 bg-gray-700">Selecciona un cantón...</option>
-                                <option *ngFor="let cant of cantones" [value]="cant" class="text-white bg-gray-700">
-                                    {{ cant }}
+                                id="ciudad" name="ciudad" formControlName="ciudad"
+                                [ngClass]="{'border-red-500': formSuppliers.get('ciudad')?.invalid && formSuppliers.get('ciudad')?.touched }">
+                                <option class="text-gray-400 bg-gray-700">Selecciona una ciudad...</option>
+                                @for (ciudad of ciudadesFiltradas; track ciudad.id) {
+                                <option [value]="ciudad.id" class="text-white bg-gray-700">
+                                    {{ ciudad.nombre }}
                                 </option>
+                                }
                             </select>
-
-                            <!-- Mostrar cantón seleccionado -->
-                            <p *ngIf="cantonSeleccionado" class="mt-2 text-gray-300">
-                                Cantón seleccionado: {{ cantonSeleccionado }}
-                            </p>
-                        </div>
-
-                        <div class="relative mb-6">
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"> Canton/City<svg
-                                    width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
-                                        fill="#EF4444" />
-                                </svg>
-                            </label>
-                            <input type="text" id="ciudad" name="ciudad"
-                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
-                                placeholder="name@pagedone.com" required="">
+                            @if (formSuppliers.get('ciudad')?.invalid && formSuppliers.get('ciudad')?.touched) {
+                            <p class="text-xs text-red-400 mt-1 pl-2">La ciudad es obligatoria.</p>
+                            }
                         </div>
                     </div>
                     <div class="grid md:grid-cols-2 grid-cols-1 gap-x-8">
                         <div class="relative mb-6">
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Email<svg width="7"
-                                    height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium" for="correo">Email
+                                <svg width="7" height="7" class="ml-1"
+                                    [ngClass]="{'opacity-100': formSuppliers.get('correo')?.invalid && formSuppliers.get('correo')?.touched, 'opacity-50': formSuppliers.get('correo')?.valid || !formSuppliers.get('correo')?.touched }"
+                                    viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
                                         fill="#EF4444" />
                                 </svg>
                             </label>
-                            <input type="email" id="correo" name="correo"
+                            <input type="email" id="correo" name="correo" formControlName="correo"
+                                [ngClass]="{'border-red-500': formSuppliers.get('correo')?.invalid && formSuppliers.get('correo')?.touched }"
                                 class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
-                                placeholder="name@pagedone.com" required="">
+                                placeholder="name@gmail.com">
+                            @if (formSuppliers.get('correo')?.invalid && formSuppliers.get('correo')?.touched) {
+                            <p class="text-xs text-red-400 mt-1 pl-2">
+                                @if (formSuppliers.get('correo')?.errors?.['required'])
+                                { El correo es obligatorio. }
+                                @else if (formSuppliers.get('correo')?.errors?.['email'])
+                                { Ingresa un correo válido. }
+                            </p>
+                            }
+
                         </div>
                         <div class="relative mb-6">
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"> Direcction<svg
-                                    width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium" for="direccion">
+                                Direction<svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
                                         fill="#EF4444" />
                                 </svg>
                             </label>
-                            <input type="text" id="direccion" name="direccion"
+                            <input type="text" id="direccion" name="direccion" formControlName="direccion"
+                                [ngClass]="{'border-red-500': formSuppliers.get('direccion')?.invalid && formSuppliers.get('direccion')?.touched}"
                                 class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
-                                placeholder="calle asturias y n17" required="">
+                                placeholder="calle asturias y n17">
+                            @if (formSuppliers.get('direccion')?.invalid && formSuppliers.get('direccion')?.touched) {
+                            <p class="text-xs text-red-400 mt-1 pl-2">
+                                @if (formSuppliers.get('direccion')?.errors?.['required']) { La dirección es
+                                obligatoria. }
+                                @else if (formSuppliers.get('direccion')?.errors?.['minlength']) { Mínimo 5 caracteres.
+                                }
+                            </p>
+                            }
                         </div>
 
                         <div class="relative mb-6">
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"> Telf <svg
-                                    width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium" for="telefono">
+                                Telf <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
                                         fill="#EF4444" />
                                 </svg>
                             </label>
-                            <input type="number" id="telf" name="telf"
+                            <input type="number" id="telefono" name="telefono" formControlName="telefono"
+                                [ngClass]="{'border-red-500': formSuppliers.get('telefono')?.invalid && formSuppliers.get('telefono')?.touched}"
                                 class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
-                                placeholder="0997864558" required="">
+                                placeholder="0997864558">
+                            @if (formSuppliers.get('telefono')?.invalid && formSuppliers.get('telefono')?.touched) {
+                            <p class="text-xs text-red-400 mt-1 pl-2">
+                                @if (formSuppliers.get('telefono')?.errors?.['required']) { El teléfono es obligatorio.
+                                }
+                                @if (formSuppliers.get('telefono')?.errors?.['pattern']) { Solo se permiten números. }
+                                @if (formSuppliers.get('telefono')?.errors?.['minlength']) { Debe tener al menos 9
+                                dígitos. }
+                                @if (formSuppliers.get('telefono')?.errors?.['maxlength']) { No puede tener más de 10
+                                dígitos. }
+                            </p>
+                            }
                         </div>
                     </div>
                 </section>
@@ -210,9 +268,8 @@
                     <h1 class="text-white text-xl font-semibold mb-3">Bank information</h1>
                     <div class="mt-5 grid md:grid-cols-2 grid-cols-1 gap-x-8">
                         <div class="relative mb-6">
-
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Type of bank<svg
-                                    width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium" for="banco">Type of
+                                bank<svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
@@ -221,78 +278,145 @@
                             </label>
                             <select
                                 class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white border border-gray-600 rounded-full placeholder-gray-400 focus:outline-none"
-                                name="bank" id="bank">
-                                <option class="text-gray-400 bg-gray-700" value="pichincha">Pichincha</option>
-                                <option class="text-gray-400 bg-gray-700" value="guayaquil">Guayaquil</option>
-                                <option class="text-gray-400 bg-gray-700" value="produbanco">Produbanco</option>
+                                name="banco" id="banco" formControlName="banco"
+                                [ngClass]="{ 'border-red-500 focus:ring-red-500': formSuppliers.get('banco')?.invalid && (formSuppliers.get('banco')?.touched || formSuppliers.get('banco')?.dirty) }">
+                                <option value="">Select a bank...</option>
+                                <option class="text-white-400 bg-gray-700" value="pichincha">Pichincha</option>
+                                <option class="text-white-400 bg-gray-700" value="guayaquil">Guayaquil</option>
+                                <option class="text-white-400 bg-gray-700" value="produbanco">Produbanco</option>
                             </select>
-                        </div>
-
-                        <div class="relative mb-6">
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Type of count<svg
-                                    width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
-                                        fill="#EF4444" />
-                                </svg>
-                            </label>
-                            <select
-                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white border border-gray-600 rounded-full placeholder-gray-400 focus:outline-none"
-                                name="bank" id="bank">
-                                <option class="text-gray-400 bg-gray-700" value="corriente">Corriente</option>
-                                <option class="text-gray-400 bg-gray-700" value="ahorros">Ahorros</option>
-                            </select>
-                        </div>
-
-                        <div class="relative mb-6">
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Number of count
-                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
-                                        fill="#EF4444" />
-                                </svg>
-                            </label>
-                            <input type="text" id="numeroCuenta" name="numeroCuenta"
-                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
-                                placeholder="25781624" required="">
-                        </div>
-
-                        <div class="relative mb-6">
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Account holder name
-                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
-                                        fill="#EF4444" />
-                                </svg>
-                            </label>
-                            <input type="text" id="default-search"
-                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
-                                placeholder="25781624" required="">
-                        </div>
-                        <div class="relative mb-6">
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Cedula/RUC of the
-                                owner <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
-                                        fill="#EF4444" />
-                                </svg>
-                            </label>
-                            <input type="text" id="default-search"
-                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
-                                placeholder="25781624" required="">
+                            @if (formSuppliers.get('banco')?.invalid && (formSuppliers.get('banco')?.touched ||
+                            formSuppliers.get('banco')?.dirty)) {
+                            <div class="mt-1 text-xs text-red-400 pl-4">
+                                Please select a bank.
+                            </div>
+                            }
                         </div>
                     </div>
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"
+                                for="tipo_cuenta">Type of count
+                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <select
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white border border-gray-600 rounded-full placeholder-gray-400 focus:outline-none"
+                                name="tipo_cuenta" id="tipo_cuenta" formControlName="tipo_cuenta"
+                                [ngClass]="{ 'border-red-500 focus:ring-red-500': formSuppliers.get('tipo_cuenta')?.invalid && (formSuppliers.get('tipo_cuenta')?.touched || formSuppliers.get('tipo_cuenta')?.dirty) }">
+                                <option value="">Select an account type...</option>
+                                <option class="text-white-400 bg-gray-700" value="corriente">Corriente</option>
+                                <option class="text-white-400 bg-gray-700" value="ahorros">Ahorros</option>
+                            </select>
+                            @if (formSuppliers.get('tipo_cuenta')?.invalid && (formSuppliers.get('tipo_cuenta')?.touched
+                            || formSuppliers.get('tipo_cuenta')?.dirty)) {
+                            <div class="mt-1 text-xs text-red-400 pl-4">
+                                Please select an account type.
+                            </div>
+                            }
+                        </div>
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"
+                                for="num_cuenta">Number of count
+                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="text" id="num_cuenta" name="num_cuenta" formControlName="num_cuenta"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="25781624"
+                                [ngClass]="{ 'border-red-500 focus:ring-red-500': formSuppliers.get('num_cuenta')?.invalid && (formSuppliers.get('num_cuenta')?.touched || formSuppliers.get('num_cuenta')?.dirty) }">
+                            @if (formSuppliers.get('num_cuenta')?.invalid && (formSuppliers.get('num_cuenta')?.touched
+                            || formSuppliers.get('num_cuenta')?.dirty)) {
+                            <div class="mt-1 text-xs text-red-400 pl-4">
+                                @if (formSuppliers.get('num_cuenta')?.errors?.['required'])
+                                { <div>The account number is required.</div> }
+                                @if (formSuppliers.get('num_cuenta')?.errors?.['pattern']) {
+                                <div>Only numbers are allowed.</div>
+                                }
+                                @if (formSuppliers.get('num_cuenta')?.errors?.['minlength']) {
+                                <div>Minimum 10 digits.</div>
+                                }
+                                @if (formSuppliers.get('num_cuenta')?.errors?.['maxlength']) {
+                                <div>Maximum 20 digits.</div>
+                                }
+                            </div>
+                            }
+                        </div>
+                        <div class="relative mb-6">
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"
+                                for="dueno-cuenta">Account holder name
+                                <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                        fill="#EF4444" />
+                                </svg>
+                            </label>
+                            <input type="text" id="dueno_cuenta" name="dueno_cuenta" formControlName="dueno_cuenta"
+                                class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                placeholder="Mateo Reyes"
+                                [ngClass]="{ 'border-red-500 focus:ring-red-500': formSuppliers.get('dueno_cuenta')?.invalid && (formSuppliers.get('dueno_cuenta')?.touched || formSuppliers.get('dueno_cuenta')?.dirty) }">
+                            @if (formSuppliers.get('dueno_cuenta')?.invalid
+                            &&(formSuppliers.get('dueno_cuenta')?.touched || formSuppliers.get('dueno_cuenta')?.dirty))
+                            {
+                            <div class="mt-1 text-xs text-red-400 pl-4">
+                                @if (formSuppliers.get('dueno_cuenta')?.errors?.['required']) {
+                                <div>The account holder name is required.</div>
+                                }
+                                @if (formSuppliers.get('dueno_cuenta')?.errors?.['pattern']) {
+                                <div>Only letters are allowed.</div>
+                                }
+                            </div>
+                            }
+                            <div class="relative mb-6">
+                                <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"
+                                    for="cedula_ruc_dueno">Cedula/RUC of the
+                                    owner <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M3.11222 6.04545L3.20668 3.94744L1.43679 5.08594L0.894886 4.14134L2.77415 3.18182L0.894886 2.2223L1.43679 1.2777L3.20668 2.41619L3.11222 0.318182H4.19105L4.09659 2.41619L5.86648 1.2777L6.40838 2.2223L4.52912 3.18182L6.40838 4.14134L5.86648 5.08594L4.09659 3.94744L4.19105 6.04545H3.11222Z"
+                                            fill="#EF4444" />
+                                    </svg>
+                                </label>
+                                <input type="text" id="cedula_ruc_dueno" name="cedula_ruc_dueno"
+                                    formControlName="cedula_ruc_dueno"
+                                    class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
+                                    placeholder="1712345678"
+                                    [ngClass]="{ 'border-red-500 focus:ring-red-500': formSuppliers.get('cedula_ruc_dueno')?.invalid && (formSuppliers.get('cedula_ruc_dueno')?.touched || formSuppliers.get('cedula_ruc_dueno')?.dirty) }">
+                                @if (formSuppliers.get('cedula_ruc_dueno')?.invalid &&
+                                (formSuppliers.get('cedula_ruc_dueno')?.touched ||
+                                formSuppliers.get('cedula_ruc_dueno')?.dirty)) {
+                                <div class="mt-1 text-xs text-red-400 pl-4">
+                                    @if (formSuppliers.get('cedula_ruc_dueno')?.errors?.['required']) {
+                                    <div>The ID/RUC is required.</div>
+                                    }
+                                    @if (formSuppliers.get('cedula_ruc_dueno')?.errors?.['pattern']) {
+                                    <div>Only numbers are allowed.</div>
+                                    }
+                                    @if (formSuppliers.get('cedula_ruc_dueno')?.errors?.['minlength']) {
+                                    <div>Must have at least 10 digits.</div>
+                                    }
+                                    @if (formSuppliers.get('cedula_ruc_dueno')?.errors?.['maxlength']) {
+                                    <div>Must not exceed 13 digits.</div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
                 </section>
 
                 <section class="mt-5">
                     <h1 class="text-white text-xl font-semibold mb-3">Operational details</h1>
                     <div class="mt-5 grid md:grid-cols-2 grid-cols-1 gap-x-8">
                         <div class="relative mb-6">
-                            <label class="flex items-center mb-2 text-gray-600 text-sm font-medium">
+                            <label class="flex items-center mb-2 text-gray-600 text-sm font-medium" for="rubro">
                                 Choose a rubro
                                 <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -303,44 +427,58 @@
                             </label>
                             <select
                                 class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white border border-gray-600 rounded-full placeholder-gray-400 focus:outline-none"
-                                id="rubro">
-                                <option class="text-gray-400 bg-gray-700" value="">Select a rubro</option>
-                                <option class="text-gray-400 bg-gray-700" value="suministros de Oficina y Papelería">
+                                id="rubro" name="rubro" formControlName="rubro"
+                                [class.border-red-500]="campoInvalido('rubro')">
+                                <option class="text-white-400 bg-gray-700" value="">Select a rubro</option>
+                                <option class="text-white-400 bg-gray-700" value="suministros de Oficina y Papelería">
                                     Suministros de Oficina y Papelería</option>
-                                <option class="text-gray-400 bg-gray-700" value="equipos de Cómputo y Tecnología">
+                                <option class="text-white-400 bg-gray-700" value="equipos de Cómputo y Tecnología">
                                     Equipos de Cómputo y Tecnología</option>
-                                <option class="text-gray-400 bg-gray-700" value="mantenimiento y Ferretería">
+                                <option class="text-white-400 bg-gray-700" value="mantenimiento y Ferretería">
                                     Mantenimiento y Ferretería</option>
-                                <option class="text-gray-400 bg-gray-700" value="limpieza e Higiene">Limpieza e Higiene
+                                <option class="text-white-400 bg-gray-700" value="limpieza e Higiene">Limpieza e Higiene
                                 </option>
-                                <option class="text-gray-400 bg-gray-700" value="alimentos y Bebidas">Alimentos y
+                                <option class="text-white-400 bg-gray-700" value="alimentos y Bebidas">Alimentos y
                                     Bebidas</option>
-                                <option class="text-gray-400 bg-gray-700" value="materia Prima">Materia Prima</option>
-                                <option class="text-gray-400 bg-gray-700" value="textiles y Uniformes">Textiles y
+                                <option class="text-white-400 bg-gray-700" value="materia Prima">Materia Prima</option>
+                                <option class="text-white-400 bg-gray-700" value="textiles y Uniformes">Textiles y
                                     Uniformes</option>
-                                <option class="text-gray-400 bg-gray-700" value="salud y Farmacéutica">Salud y
+                                <option class="text-white-400 bg-gray-700" value="salud y Farmacéutica">Salud y
                                     Farmacéutica</option>
-                                <option class="text-gray-400 bg-gray-700" value="Servicios">Servicios (Contabilidad,
+                                <option class="text-white-400 bg-gray-700" value="Servicios">Servicios (Contabilidad,
                                     Software, etc.)</option>
-                                <option class="text-gray-400 bg-gray-700" value="otros">Otros</option>
+                                <option class="text-white-400 bg-gray-700" value="otros">Otros</option>
                             </select>
+                            @if (campoInvalido('rubro')) {
+                            <div class="text-red-500 text-xs mt-1">
+                                Rubro selection is required.
+                            </div>
+                            }
                         </div>
                         <div class="relative mb-6">
-                            <fieldset class="text-gray-300">
+                            <fieldset class="text-gray-300" [class.border-red-500]="campoInvalido('estado')">
                                 <legend class="text-lg font-semibold text-white mb-2">Estado</legend>
 
                                 <div>
-                                    <input type="radio" id="doc-cedula" name="tipoDocumento" value="cedula">
-                                    <label for="doc-cedula" class="ml-2">Activo</label>
+                                    <input type="radio" id="estado-activo" name="estado" value="activo"
+                                        formControlName="estado">
+                                    <label for="estado-activo" class="ml-2">Activo</label>
                                 </div>
                                 <div>
-                                    <input type="radio" id="doc-cedula" name="tipoDocumento" value="cedula">
-                                    <label for="doc-cedula" class="ml-2">Inactivo</label>
+                                    <input type="radio" id="estado-inactivo" name="estado" value="inactivo"
+                                        formControlName="estado">
+                                    <label for="estado-inactivo" class="ml-2">Inactivo</label>
                                 </div>
+                                @if (campoInvalido('estado')) {
+                                <div class="text-red-500 text-xs mt-1">
+                                    You must select an operational state.
+                                </div>
+                                }
                             </fieldset>
                         </div>
                         <div class="relative mb-6">
-                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium">Observation
+                            <label class="flex  items-center mb-2 text-gray-600 text-sm font-medium"
+                                for="observacion">Observation
                                 <svg width="7" height="7" class="ml-1" viewBox="0 0 7 7" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -348,19 +486,43 @@
                                         fill="#EF4444" />
                                 </svg>
                             </label>
-                            <input type="text" id="trade name"
+                            <input type="text" id="observacion" name="observacion" formControlName="observacion"
                                 class="block w-full h-11 px-5 py-2.5 leading-7 text-base font-normal shadow-xs text-white bg-transparent border border-gray-300 rounded-full placeholder-gray-400 focus:outline-none "
-                                placeholder="Entrega solo los martes o Pedir con 3 días de anticipación" required="">
+                                placeholder="Entrega solo los martes o Pedir con 3 días de anticipación"
+                                [class.border-red-500]="campoInvalido('observacion')">
+                            @if (campoInvalido('observacion')) {
+                            <div class="text-red-500 text-xs mt-1">
+                                @if (formSuppliers.get('observacion')?.errors?.['required']) {
+                                <span>
+                                    Observation is required.
+                                </span>
+                                }
+                                @if (formSuppliers.get('observacion')?.errors?.['minlength']) {
+                                <span>
+                                    Must contain at least 5 characters.
+                                </span>
+                                }
+                                @if (formSuppliers.get('observacion')?.errors?.['maxlength']) {
+                                <span>
+                                    Maximum 100 characters allowed.
+                                </span>
+                                }
+                                @if (formSuppliers.get('observacion')?.errors?.['pattern']) {
+                                <span>
+                                    Only letters, numbers, spaces, and punctuation are allowed.
+                                </span>
+                                }
+                            </div>
+                            }
                         </div>
-
                     </div>
-
                 </section>
 
                 <section class="mt-5">
                     <h1 class="text-white text-xl font-semibold mb-3">Logo empresarial o imagen</h1>
-                    <div
-                        class="relative flex flex-col items-center justify-center w-full bg-gray-800 border-2 border-gray-600 border-dashed rounded-lg p-10 cursor-pointer hover:bg-gray-700 transition-colors">
+
+                    <div class="relative flex flex-col items-center justify-center w-full bg-gray-800 border-2 border-gray-600 border-dashed rounded-lg p-10 cursor-pointer hover:bg-gray-700 transition-colors"
+                        [class.border-red-500]="campoInvalido('imagen')">
                         <div class="flex flex-col items-center justify-center text-center">
                             <svg class="w-10 h-10 mb-4 text-gray-500" aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
@@ -369,26 +531,59 @@
                                     d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
                             </svg>
                             <p class="mb-2 text-sm text-gray-400">
-                                <span class="font-semibold text-indigo-500">Haz clic para subir</span> o arrastra y
-                                suelta
+                                <span class="font-semibold text-indigo-500">Haz clic para subir</span> o
+                                arrastra y suelta
                             </p>
-                            <p class="text-xs text-gray-500">
-                                PNG, JPG o JPEG (MAX. 800x400px)
-                            </p>
+                            <p class="text-xs text-gray-500">PNG, JPG o JPEG (MAX. 800x400px)</p>
                         </div>
-                        <input type="file" id="logo-upload"
+
+                        <input type="file" formControlName="imagen" id="logo-upload"
                             class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                            accept="image/png, image/jpeg">
+                            accept="image/png, image/jpeg" (change)="imagenSeleccionada($event)" />
                     </div>
-                    <p id="file-name" class="mt-2 text-sm text-gray-400"></p>
+
+                    <!-- Nombre del archivo -->
+                    <p id="file-name" class="mt-2 text-sm text-gray-400">{{ fileName }}</p>
+
+                    <!-- Vista previa -->
+                    @if (imagePreview) {
+                    <div class="mt-4">
+                        <img [src]="imagePreview" alt="Vista previa"
+                            class="max-w-[200px] rounded-lg border border-gray-600" />
+                    </div>
+                    }
+
+                    <!-- Mensajes de error -->
+                    @if (campoInvalido('imagen')) {
+                    <div class="text-red-500 text-xs mt-2">
+                        @if (formSuppliers.get('imagen')?.errors?.['invalidType']) {
+                        <span>
+                            Solo se permiten archivos PNG o JPG.
+                        </span>
+                        }
+                        @if (formSuppliers.get('imagen')?.errors?.['tooLarge']) {
+                        <span>
+                            El archivo no debe superar los 500 KB.
+                        </span>
+                        }
+                        @if (formSuppliers.get('imagen')?.errors?.['wrongDimensions']) {
+                        <span>
+                            La imagen debe tener un máximo de 800x400 píxeles.
+                        </span>
+                        }
+                    </div>
+                    }
                 </section>
 
+
                 <div class="flex justify-center mt-5">
-                    <button
+                    <button type="submit"
                         class="w-52 h-12 bg-indigo-600 hover:bg-indigo-800 transition-all duration-700 rounded-full shadow-xs text-white text-base font-semibold leading-6">Send
                         Message</button>
                 </div>
             </form>
+            }
+
 
 
         </div>
