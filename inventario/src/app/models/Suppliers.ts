@@ -1,21 +1,21 @@
-import { Provincia, Ciudad } from './provincia';
+
 
 export interface Proveedor {
     id?: number;
-    nom_empresa: string;
-    nom_comercial: string;
+    nombre_empresa: string;
+    nombre_comercial: string;
     tipo_documento: 'cedula' | 'ruc';
-    num_documento: string;
+    numero_documento: string;
     
     // --- 2. Dirección ---
     provincia: number; 
-    ciudad: number;
+    canton: number;
     correo: string;
     direccion: string;
     telefono: string;
 
     // --- 3. Información Bancaria ---
-    banco: string;
+    tipo_banco: string;
     tipo_cuenta: 'Ahorro' | 'Corriente';
     num_cuenta: string;
     dueno_cuenta: string;
@@ -24,6 +24,6 @@ export interface Proveedor {
     // --- 4. Detalles Operacionales ---
     rubro: string;
     estado: 'Activo' | 'Inactivo';
-    observacion: string;
+    observaciones: string;
     imagen?: File; 
 }

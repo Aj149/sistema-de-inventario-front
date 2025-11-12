@@ -1,17 +1,17 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
-import { NavbarComponent } from "../../shared/navbar/navbar";
-import { Footer } from "../../shared/footer/footer";
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ProvinciasService } from '../../core/service/provincias.service';
-import { Ciudad, Provincia } from '../../models/provincia';
-import { Proveedor } from '../../models/Suppliers';
-import { SuppliersService } from '../../core/service/suppliers.service';
 import Swal from 'sweetalert2';
+import { RouterLink } from "@angular/router";
+import { NavbarComponent } from '../../../shared/navbar/navbar';
+import { Footer } from '../../../shared/footer/footer';
+import { Ciudad, Provincia } from '../../../models/provincia';
+import { ProvinciasService } from '../../../core/service/provincias.service';
+import { SuppliersService } from '../../../core/service/suppliers.service';
 
 @Component({
   selector: 'app-create-suppliers',
-  imports: [NavbarComponent, Footer, FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [NavbarComponent, Footer, FormsModule, CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './create-suppliers.html',
   styleUrl: './create-suppliers.css'
 })
@@ -28,6 +28,7 @@ export class CreateSuppliers {
   fileName: string = '';
   imagePreview: string | ArrayBuffer | null = null;
 
+
   
   constructor(
     private fb: FormBuilder,
@@ -36,27 +37,28 @@ export class CreateSuppliers {
     private cdr: ChangeDetectorRef
   ) {
     this.formSuppliers = this.fb.group({
-      nom_empresa: ['', [Validators.required, Validators.minLength(3)]],
-      nom_comercial: ['', [Validators.required, Validators.minLength(3)]],
+      nombre_empresa: ['', [Validators.required, Validators.minLength(3)]],
+      nombre_comercial: ['', [Validators.required, Validators.minLength(3)]],
       tipo_documento: ['', Validators.required],
-      num_documento: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+      numero_documento: ['', [Validators.required, this.validarDocumento.bind(this)]],
       provincia: ['', Validators.required],
-      ciudad: ['', Validators.required],
+      canton: ['', Validators.required],
       correo: ['', [Validators.required, Validators.email]],
       direccion: ['', [Validators.required, Validators.minLength(5)]],
       telefono: ['',[ Validators.required, Validators.pattern(/^[0-9]+$/), Validators.minLength(9), Validators.maxLength(10), ],],
-      banco: ['', Validators.required],
+      tipo_banco: ['', Validators.required],
       tipo_cuenta: ['', Validators.required],
       num_cuenta: ['',[Validators.required,Validators.pattern('^[0-9]+$'),Validators.minLength(10),Validators.maxLength(20),],],
       dueno_cuenta: ['',[Validators.required,Validators.pattern(/^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/),],],
       cedula_ruc_dueno: ['',[Validators.required,Validators.pattern('^[0-9]+$'),Validators.minLength(10),Validators.maxLength(13),],],
       rubro: ['', Validators.required],
       estado: ['', Validators.required],
-      observacion: ['',[Validators.required,Validators.minLength(5),Validators.maxLength(100),Validators.pattern(/^[a-zA-Z0-9\s.,áéíóúÁÉÍÓÚñÑ-]+$/),],],
+      observaciones: ['',[Validators.required,Validators.minLength(5),Validators.maxLength(100),Validators.pattern(/^[a-zA-Z0-9\s.,áéíóúÁÉÍÓÚñÑ-]+$/),],],
       imagen:[null]
     });
-    this.formSuppliers.get('tipoDocumento')?.valueChanges.subscribe(() => {
-      this.formSuppliers.get('numeroDocumento')?.updateValueAndValidity();
+    this.formSuppliers.get('tipo_documento')?.valueChanges.subscribe(() => {
+  this.formSuppliers.get('numero_documento')?.reset();
+  this.formSuppliers.get('numero_documento')?.updateValueAndValidity();
     });
   }
 
@@ -75,7 +77,7 @@ ngOnInit(): void {
   
   // Validador personalizado
   validarDocumento(control: AbstractControl): ValidationErrors | null {
-  const tipo = this.formSuppliers?.get('tipoDocumento')?.value;
+  const tipo = this.formSuppliers?.get('tipo_documento')?.value;
   const numero = control.value;
   
   if (!numero || !tipo) {
@@ -88,20 +90,20 @@ ngOnInit(): void {
   }
   
   // Validar longitud según el tipo
-  if (tipo === 'cedula' && numero.length !== 10) {
+  if (tipo === 'CEDULA' && numero.length !== 10) {
     return { longitudInvalida: 'La cédula debe tener 10 dígitos' };
   }
   
-  if (tipo === 'ruc' && numero.length !== 13) {
+  if (tipo === 'RUC' && numero.length !== 13) {
     return { longitudInvalida: 'El RUC debe tener 13 dígitos' };
   }
   
   // Validar formato específico
-  if (tipo === 'cedula') {
+  if (tipo === 'CEDULA') {
     return this.validarCedulaEcuatoriana(numero);
   }
   
-  if (tipo === 'ruc') {
+  if (tipo === 'RUC') {
     return this.validarRucEcuatoriano(numero);
   }
   
@@ -147,7 +149,7 @@ ngOnInit(): void {
   const cedulaBase = ruc.substring(0, 10);
   const cedulaError = this.validarCedulaEcuatoriana(cedulaBase);
   if (cedulaError) {
-    return { formatoInvalido: 'Los primeros 10 dígitos del RUC no forman una cédula válida' };
+    return { formatoInvalido: 'Los primeros 10 dígitos del RUC no forman un ruc válido' };
   }
   
   // Validar que los últimos 3 dígitos sean de establecimiento válido
@@ -204,6 +206,7 @@ trerProvincias(): void {
       const control = this.formSuppliers.get(campo);
       return !!(control && control.invalid && (control.dirty || control.touched));
     }
+selectedFile: File | null = null;
 
 
     imagenSeleccionada(event: any) {
@@ -217,9 +220,15 @@ trerProvincias(): void {
     }
 
     const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-    const maxSize = 1024 * 500; // 500 KB
-    const maxWidth = 800;
-    const maxHeight = 400;
+    const maxSize = 1024 * 2000; //2mb
+    // const maxWidth = 900;
+    // const maxHeight = 500;
+
+
+     // ✅ Guardar el archivo sin asignarlo al formControl
+  this.selectedFile = file;
+  this.formSuppliers.get('imagen')?.setErrors(null);
+  this.fileName = file.name;
 
     // Validar tipo
     if (!allowedTypes.includes(file.type)) {
@@ -228,99 +237,74 @@ trerProvincias(): void {
       return;
     }
 
-    // Validar tamaño
-    if (file.size > maxSize) {
-      this.formSuppliers.get('imagen')?.setErrors({ tooLarge: true });
-      this.fileName = '';
-      return;
-    }
-
-    // Validar dimensiones de la imagen
     const reader = new FileReader();
-    reader.onload = (e: any) => {
-      const img = new Image();
-      img.onload = () => {
-        if (img.width > maxWidth || img.height > maxHeight) {
-          this.formSuppliers.get('imagen')?.setErrors({ wrongDimensions: true });
-          this.fileName = '';
-        } else {
-          this.formSuppliers.get('imagen')?.setValue(file);
-          this.formSuppliers.get('imagen')?.setErrors(null);
-          this.fileName = file.name;
-          this.imagePreview = e.target.result;
-        }
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
+  reader.onload = (e: any) => {
+    this.imagePreview = e.target.result;
+  };
+  reader.readAsDataURL(file);
   }
 
+      
 
 
-  enviar() {
+  // Vista previa
+ enviar() {
   this.formEnviado = true;
-  if (this.formSuppliers.valid) {
-    const formValues = this.formSuppliers.value;
-    const nuevoProveedor: Proveedor ={
-      nom_empresa: formValues.nom_empresa,
-      nom_comercial: formValues.nom_comercial,
-      tipo_documento: formValues.tipo_cedula,
-      num_documento: formValues.num_documento,
-      provincia: formValues.provincia,
-      ciudad: formValues.ciudad,
-      correo: formValues.correo,
-      direccion: formValues.direccion,
-      telefono: formValues.telefono,
-      banco: formValues.banco,
-      tipo_cuenta: formValues.tipo_cuenta,
-      num_cuenta: formValues.num_cuenta,
-      dueno_cuenta: formValues.deuno_cuenta,
-      cedula_ruc_dueno: formValues.cedula_ruc_dueno,
-      rubro: formValues.rubro,
-      estado: formValues.estado,
-      observacion: formValues.observacion,
-      imagen: formValues.imagen,
-    };
-    console.log(nuevoProveedor);
-    this.suppliersService.crearProveedor(nuevoProveedor).subscribe(
-      response =>{
-         Swal.fire({
-            icon: 'success',
-            title: '¡Proveedor creado!',
-            text: 'El proveedor se ha creado correctamente.',
-            confirmButtonText: 'Aceptar',
-            timer: 3000,
-            timerProgressBar: true
-          });
-          this.formSuppliers.reset();
-          console.log('Proveedor creado con éxito', response);
-      },
-       error => {
-          // Manejo de errores
-          console.error('Error al crear la reserva', error);
 
-          if (error.status === 409) {
-            // Error de conflicto: horario ya reservado
-            Swal.fire({
-              icon: 'error',
-              title: 'Horario no disponible',
-              text: error.error.message || 'El horario ya está reservado para esa fecha.',
-              confirmButtonText: 'Aceptar',
-            });
-          } else {
-            // Otros errores
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Ocurrió un error al crear la reserva. Inténtalo de nuevo.',
-              confirmButtonText: 'Aceptar',
-            });
-          }
-        }
-    );
+  // Verifica si el formulario es válido
+  if (!this.formSuppliers.valid) {
+    console.error('FORMULARIO INVÁLIDO');
+    // Mostrar alerta con los campos específicos
+    Swal.fire({
+      icon: 'error',
+      title: 'Formulario incompleto o inválido',
+      confirmButtonText: 'Aceptar',
+    });
+
+    return; // Detener el envío
   }
-}
 
+  const formValues = this.formSuppliers.value;
+  const formData = new FormData();
+
+  // Agrega todos los campos al FormData
+  for (const key in formValues) {
+    if (formValues.hasOwnProperty(key) && key !== 'imagen') {
+      formData.append(key, formValues[key]);
+    }
+  }
+
+  // Agrega la imagen si existe
+  if (this.selectedFile) {
+    formData.append('imagen', this.selectedFile);
+  }
+
+  // Llama al servicio
+  this.suppliersService.crearProveedor(formData).subscribe({
+    next: (response) => {
+      Swal.fire({
+        icon: 'success',
+        title: '¡Proveedor creado!',
+        text: 'El proveedor se ha creado correctamente.',
+        confirmButtonText: 'Aceptar',
+        timer: 3000,
+        timerProgressBar: true,
+      });
+      this.formSuppliers.reset();
+      this.imagePreview = null;
+      this.fileName = '';
+    },
+    error: (error) => {
+      console.error('Error al crear el proveedor', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ocurrió un error al crear el proveedor. Inténtalo de nuevo.',
+        confirmButtonText: 'Aceptar',
+      });
+    },
+  });
+}
 
 
 

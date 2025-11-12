@@ -11,30 +11,28 @@ export class SuppliersService {
 
   suppliersURL = enviroment.suppliersURL
 
-  constructor(private httpclient: HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
 
 
 
-  public crearProveedor(nuevoProveedor: Proveedor): Observable<any>{
-    return this.httpclient.post<any>(`${this.suppliersURL}`,nuevoProveedor);
+    public crearProveedor(formData: FormData): Observable<any> {
+  return this.httpClient.post<any>(`${this.suppliersURL}`, formData);
+}
+    public obtenerProveedor(): Observable<Proveedor[]> {
+    return this.httpClient.get<Proveedor[]>(this.suppliersURL);
   }
 
-  // Función para subir la imagen
-  uploadImage(productId: number, file: File): Observable<any> {
-    
-    // 1. Necesitas FormData para enviar archivos
-    const formData = new FormData();
-    
-    // 2. 'image' debe coincidir con el nombre de tu modelo (`image = ...`)
-    formData.append('image', file, file.name);
+  public id_proveedor(id_proveedor: number): Observable<Proveedor> {
+    return this.httpClient.get<Proveedor>(`${this.suppliersURL}/${id_proveedor}`);
+  }
 
-    // (Opcional) Si también quieres actualizar el nombre
-    // formData.append('name', 'Nuevo Nombre Desde Angular');
+  public eliminarProveedor(id_proveedor: number): Observable<any> {
+return this.httpClient.delete<any>(`${this.suppliersURL}/${id_proveedor}`);
+}
 
-    // 3. Envía un PATCH
-    // Usamos PATCH porque solo queremos actualizar un campo (la imagen),
-    // no todo el objeto.
-    return this.httpclient.patch(`${this.suppliersURL}/products/${productId}/`, formData);
+
+  public update(id_proveedor: number, proveedor: Proveedor): Observable<any> {
+    return this.httpClient.patch<any>(`${this.suppliersURL}/${id_proveedor}`, proveedor);
   }
 
 }

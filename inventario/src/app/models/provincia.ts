@@ -1,7 +1,7 @@
 export interface Provincia {
     id?: number;
     nombre: string;
-    ciudad: Ciudad [];
+    canton: Ciudad [];
 } 
 
 export interface Ciudad {

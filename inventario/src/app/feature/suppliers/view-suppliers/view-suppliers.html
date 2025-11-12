@@ -1,0 +1,134 @@
+<app-navbar></app-navbar>
+
+<main>
+
+    <div class="p-4 sm:ml-64">
+
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+            @for (proveedor of proveedores; track proveedor) {
+
+            <div class="text-2xl flex justify-center mt-5">
+                <h1 class="text-white text-5xl mb-15 font-bold"> {{proveedor.nombre_comercial }}</h1>
+            </div>
+            }
+
+            @for (proveedor of proveedores; track proveedor) {
+
+            <div class="flex flex-col md:flex-row md:items-start gap-6 mb-10">
+
+                <!-- 🟩 Imagen: arriba en móvil, derecha en escritorio -->
+                <div class="flex justify-center md:justify-end md:order-2">
+                    <a [href]="'https://www.supermaxi.com/'" target="_blank" rel="noopener noreferrer">
+                        <img class="w-44 h-44 md:w-52 md:h-52 object-cover rounded-xl border border-gray-300 shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
+                            [src]="proveedor.imagen" alt="{{ proveedor.nombre_comercial }}" />
+                    </a>
+                </div>
+
+
+                <!-- 🟦 Contenido principal -->
+                <div class="flex flex-col gap-6 md:flex-1 md:order-1">
+
+                    <!-- INFORMACIÓN GENERAL -->
+                    <div class="flex justify-center">
+                        <div class="w-full max-w-2xl space-y-6">
+                            <div class="bg-white rounded-2xl p-4 shadow-md">
+                                <h1 class="text-lg font-bold mb-4">INFORMACIÓN GENERAL</h1>
+                                <div class="grid grid-cols-2 gap-y-2">
+                                    <p class="font-semibold">Nombre de la empresa:</p>
+                                    <p>{{ proveedor.nombre_empresa }}</p>
+                                    <p class="font-semibold">Documento:</p>
+                                    <p>{{ proveedor.tipo_documento }}</p>
+                                    <p class="font-semibold">Número de identificación:</p>
+                                    <p>{{ proveedor.numero_documento }}</p>
+                                    <p class="font-semibold">Teléfono:</p>
+                                    <p>{{ proveedor.telefono }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- DIRECCIÓN -->
+                    <div class="flex justify-center">
+                        <div class="w-full max-w-2xl space-y-6">
+                            <div class="bg-white rounded-2xl p-4 shadow-md">
+                                <h1 class="text-lg font-bold mb-4">DIRECCIÓN</h1>
+                                <div class="grid grid-cols-2 gap-y-2">
+                                    <p class="font-semibold">Correo:</p>
+                                    <p class="break-all">
+                                        <a [href]="'https://mail.google.com/mail/?view=cm&fs=1&to=' + proveedor.correo"
+                                            target="_blank" class="text-blue-600 hover:underline break-all">
+                                            {{ proveedor.correo }}
+                                        </a>
+                                    </p>
+
+                                    <p class="font-semibold">Teléfono:</p>
+                                    <p>{{ proveedor.telefono }}</p>
+                                    <p class="font-semibold">Provincia:</p>
+                                    <p>{{ proveedor.provincia }}</p>
+                                    <p class="font-semibold">Cantón:</p>
+                                    <p>{{ proveedor.canton }}</p>
+                                    <p class="font-semibold">Dirección:</p>
+                                    <p>
+                                        <a [href]="'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(proveedor.direccion)"
+                                            target="_blank" class="text-blue-600 hover:underline">
+                                            {{ proveedor.direccion }}
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- INFORMACIÓN BANCARIA -->
+                    <div class="flex justify-center">
+                        <div class="w-full max-w-2xl space-y-6">
+
+                            <div class="bg-white rounded-2xl p-4 shadow-md">
+                                <h1 class="text-lg font-bold mb-4">INFORMACIÓN BANCARIA</h1>
+                                <div class="grid grid-cols-2 gap-y-2">
+                                    <p class="font-semibold">Tipo de banco:</p>
+                                    <p>{{ proveedor.tipo_banco }}</p>
+                                    <p class="font-semibold">Tipo de cuenta:</p>
+                                    <p>{{ proveedor.tipo_cuenta }}</p>
+                                    <p class="font-semibold">Número de cuenta:</p>
+                                    <p>{{ proveedor.num_cuenta }}</p>
+                                    <p class="font-semibold">Dueño de la cuenta:</p>
+                                    <p>{{ proveedor.dueno_cuenta }}</p>
+                                    <p class="font-semibold">Documento de identificación:</p>
+                                    <p>{{ proveedor.cedula_ruc_dueno }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- DETALLES OPERACIONALES -->
+                    <div class="flex justify-center">
+                        <div class="w-full max-w-2xl space-y-6">
+                            <div class="bg-white rounded-2xl p-4 shadow-md">
+                                <h1 class="text-lg font-bold mb-4">DETALLES OPERACIONALES</h1>
+                                <div class="grid grid-cols-2 gap-y-2">
+                                    <p class="font-semibold">Rubro:</p>
+                                    <p>{{ proveedor.rubro }}</p>
+                                    <p class="font-semibold">Estado:</p>
+                                    @if (proveedor.estado === 'Activo') {
+                                    <p class="text-red-600 font-bold">{{ proveedor.estado }}</p>
+                                    } @else {
+                                    <p class="text-green-600 font-bold">{{ proveedor.estado }}</p>
+                                    }
+                                    <p class="font-semibold">Observaciones:</p>
+                                    <p>{{ proveedor.observaciones }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="flex justify-center">
+            <button type="button" routerLink="/suppliers" class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-xl  text-sm px-4 py-2.5 text-center leading-5">Regresar</button>
+        </div>
+        </div>
+    </div>
+</main>
